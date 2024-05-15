@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88fe5e42531b4824a9cabbb19e1404bf, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  cost: 1
+  description: Shield 5 damage
+  cardName: Shield
+  imageRef: {fileID: 21300000, guid: c23abf2c76e2f224e93ccd5c5504141c, type: 3}
+  CardType: Shield
+  CardEffect: 5
+  cardPrefab: {fileID: 7009376252891966301, guid: ca9c685d055987a42867ce3ad0054b39, type: 3}
