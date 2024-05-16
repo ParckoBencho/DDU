@@ -21,6 +21,7 @@ public class Kort : MonoBehaviour
     private void Start()
     {
         enemy = GameObject.FindFirstObjectByType<Enemyscript>();
+
     }
 
     // Default Values
@@ -28,19 +29,23 @@ public class Kort : MonoBehaviour
 	public string description = "Sample Description";
 	public string cardName = "Ma,e"; // my id
 
-    public void Attack(int damage){
-        if(true)
+    public void Attack(int damage,int cost,Player player){
+        if(player.Energy >= cost)
         {
+            player.Energy -= cost;
             enemy.Damage(damage);
+            player.energyText.text = "Energy: " + player.Energy.ToString();
         }
     }
 
-    public void Shield(int shield,Player player)
+    public void Shield(int shield,Player player,int cost)
     {
-        if (true)
+        if (player.Energy >= cost)
         {
+            player.Energy -= cost;
             player.currentshield += shield;
-            print("Shields: " + player.currentshield);
+            player.shieldText.text = "Shield: " + player.currentshield.ToString();
+            player.energyText.text = "Energy: " + player.Energy.ToString();
         }
     }
 }

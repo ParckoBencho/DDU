@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
@@ -8,18 +9,45 @@ public class Character
 {
     public int Health;
     public string Name;
+    public int Energy;
+    public int MaxEnergy;
     public Turns turns;
+    public int currentshield;
+    public TMP_Text healthText;
+    public TMP_Text shieldText;
+    public TMP_Text energyText;
 
-    public Character(int startingHealth, string name)
+    public Character(int startingHealth,int startingEnergy, string name)
     {
         Health = startingHealth;
         Name = name;
+        currentshield = 0;
+        MaxEnergy = startingEnergy;
+        Energy = startingEnergy;
     }
 
     public void TakeDamage(int Damage)
     {
-        Health -= Damage;
-        Debug.Log(Health);
+        if (Damage - currentshield >= 0)
+        {
+            Health -= Damage - currentshield;
+        } else
+        {
+            currentshield -= Damage;
+        }
+        if(currentshield < 0)
+        {
+            currentshield = 0;
+        }
+        
+
+
+        if(Name == "Player")
+        {
+            healthText.text = "Health: " + Health.ToString();
+            shieldText.text = "Shield: " + currentshield.ToString();
+        }
+
         if(Health <= 0)
         {
             Debug.Log(Name + " has perished.");
@@ -32,31 +60,21 @@ public class Character
 }
 public class Player: Character
 {
-    public int Energy;
-    public int currentshield;
-    public Player(int startingHealth, int startingEnergy, string name) : base(startingHealth, name) 
+
+    public Player(int startingHealth, int startingEnergy, string name) : base(startingHealth, startingEnergy,name) 
     {
-        Energy = startingEnergy;
-        currentshield = 0;
+
+        healthText = GameObject.Find("PlayerHealthText").GetComponent<TMP_Text>();
+        healthText.text = "Health: " + Health;
+        
+        shieldText = GameObject.Find("PlayerShieldText").GetComponent<TMP_Text>();
+        shieldText.text = "Shield: " + currentshield;
+
+        energyText = GameObject.Find("PlayerEnergyText").GetComponent<TMP_Text>();
+        energyText.text = "Energy: " + Energy;
     }
 
-    public void UseEnergy(int Used)
-    {
-        Energy -= Used;
-    }
+
 }
 
-public class Enemy: Character
-{
-    public int MinDamage;
-    public int MaxDamage;
-    public int MinShield;
-    public int MaxShield;
-    public Enemy(int startingHealth, int minDamage, int maxDamage, string name, int minShield, int maxShield) : base(startingHealth, name)
-    {
-        MinDamage = minDamage;
-        MaxDamage = maxDamage;
-        MinShield = minShield;
-        MaxShield = maxShield;
-    }
-}
+

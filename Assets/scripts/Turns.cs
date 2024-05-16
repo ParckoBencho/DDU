@@ -9,6 +9,7 @@ public class Turns : MonoBehaviour//Statemachine
 
     public Character Player;
     public EnemyData EnemyData;
+    private bool gameWon = false;
 
 
 
@@ -24,10 +25,10 @@ public class Turns : MonoBehaviour//Statemachine
 
     void Update()
     {
-        if (canSwitchState)
+        if (canSwitchState && !gameWon)
         {
             // Check for input to switch between states
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 SwitchState();
                 canSwitchState = false;
@@ -36,7 +37,7 @@ public class Turns : MonoBehaviour//Statemachine
         else
         {
             // Check if the "E" key is released to enable state switching again
-            if (Input.GetKeyUp(KeyCode.E))
+            if (Input.GetKeyUp(KeyCode.Space))
             {
                 canSwitchState = true;
             }
@@ -45,24 +46,26 @@ public class Turns : MonoBehaviour//Statemachine
 
     private void SwitchState()
     {
-        if(EnemyData.currentshield != 0)
-        {
-            EnemyData.currentshield = 0;
-        }
         switch (currentState)
         {
             case TurnState.PlayerTurn:
                 currentState = TurnState.EnemyTurn;
                 Debug.Log("Enemy's Turn");
+                if (EnemyData.currentshield != 0)
+                {
+                    EnemyData.currentshield = 0;
+
+                }
                 int EnemyAction = Random.Range(0, 2);
-                if (EnemyAction == 0) {  //Attack
+                if (EnemyAction == 0)
+                {  //Attack
                     int Damage = Random.Range(EnemyData.MinDamage, EnemyData.MaxDamage + 1);
                     print(EnemyData.name + " Attacks for " + Damage + " Damage");
                     Player.TakeDamage(Damage);
                 }
                 else //Shield
                 {
-                    int shield = Random.Range(EnemyData.MinShield,EnemyData.MaxShield);
+                    int shield = Random.Range(EnemyData.MinShield, EnemyData.MaxShield);
                     print(EnemyData.name + " shields itself for " + shield + " Damage");
                     EnemyData.currentshield = shield;
                 }
@@ -70,11 +73,19 @@ public class Turns : MonoBehaviour//Statemachine
             case TurnState.EnemyTurn:
                 currentState = TurnState.PlayerTurn;
                 Debug.Log("Player's Turn");
+                if (Player.currentshield != 0)
+                {
+                    Player.currentshield = 0;
+                    Player.shieldText.text = "Shield: " + Player.currentshield;
+                }
+                Player.Energy = Player.MaxEnergy;
+                Player.energyText.text = "Energy: " + Player.Energy;
                 break;
             case TurnState.GameOver:
                 break;
         }
     }
+
     public void StartCombat(Character player)
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -98,17 +109,23 @@ public class Turns : MonoBehaviour//Statemachine
             Debug.LogError("No enemy GameObjects found with the specified tag.");
         }
         Player = player;
-        
+
         currentState = TurnState.PlayerTurn;
         Debug.Log("Combat started: Player's Turn");
     }
     public void CombatWin()
     {
+        gameWon = true;
         currentState = TurnState.GameOver;
         Debug.Log("You Win");
     }
 
-    public void Death() 
+    public bool IsGameWon()
+    {
+        return gameWon;
+    }
+
+    public void Death()
     {
         currentState = TurnState.GameOver;
         Debug.Log("Game Over");

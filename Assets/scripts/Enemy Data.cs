@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "NewEnemyData", menuName = "Enemy Data")]
 public class EnemyData : ScriptableObject
@@ -17,4 +19,5 @@ public class EnemyData : ScriptableObject
     public int YScale = 0;
     public EnemyData enemyData;
     public int currentshield;
+    public Text ShieldText;
 }

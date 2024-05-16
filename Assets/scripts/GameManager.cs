@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        Player player = new Player(100, 3,"Player");
+        Player player = new Player(100,3,"Player");
         player.turns = turns;
         EncounterStart(player);
     }
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
 
             // Set the position of the card relative to the center
             float cardXPosition = startX + cardSpacing * i;
-            cardObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(cardXPosition, -175f);
+            cardObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(cardXPosition, -205f);
 
             // Access the UI elements of the card prefab and update them with card data
             UpdateCardUI(cardObject, player);
@@ -81,11 +81,11 @@ public class GameManager : MonoBehaviour
         {
             if (cardData.CardType == "Attack")
             {
-                kort.Attack(cardData.CardEffect);
+                kort.Attack(cardData.CardEffect,cardData.cost,player);
             }
             if(cardData.CardType == "Shield")
             {
-                kort.Shield(cardData.CardEffect, player);
+                kort.Shield(cardData.CardEffect, player,cardData.cost);
             }
 
         });
@@ -97,6 +97,9 @@ public class GameManager : MonoBehaviour
 
     void EncounterStart(Player player)
     {
+
+        
+
         DrawStartingHand(player);
 
         enemySpawner.SpawnEnemy(enemyPrefab);
